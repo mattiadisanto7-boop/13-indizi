@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#17120f" />
+  <title>13 Indizi — Edizione Coppia</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="grain"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">13</div>
+      <div>
+        <h1>13 Indizi</h1>
+        <p>Edizione Principessa &amp; Principe</p>
+      </div>
+    </div>
+    <button id="rulesBtn" class="ghost small">Come si gioca</button>
+  </header>
+
+  <main id="app" class="app-shell">
+    <section id="homeView" class="view active">
+      <div class="hero-panel">
+        <div class="eyebrow">DEDUZIONE • 1 CONTRO 1 • ONLINE</div>
+        <h2>Scopri il tuo caso prima dell'altro detective.</h2>
+        <p class="lead">18 carte personalizzate, 6 colori e 8 informatori segreti. Create una stanza e giocate anche a distanza.</p>
+
+        <label class="field-label" for="nameInput">Il tuo nome</label>
+        <input id="nameInput" class="text-input" maxlength="24" placeholder="Mattia / Nicla" autocomplete="nickname" />
+
+        <div class="home-actions">
+          <button id="createBtn" class="primary">Crea partita</button>
+          <div class="join-box">
+            <input id="roomInput" class="text-input code-input" maxlength="4" placeholder="CODICE" autocomplete="off" />
+            <button id="joinBtn" class="secondary">Entra</button>
+          </div>
+        </div>
+        <p id="homeError" class="error"></p>
+      </div>
+
+      <div class="teams-preview" id="teamsPreview"></div>
+    </section>
+
+    <section id="lobbyView" class="view">
+      <div class="panel centered">
+        <div class="eyebrow">STANZA PRIVATA</div>
+        <h2>Codice <span id="roomCodeText" class="room-code"></span></h2>
+        <p>Invia questo codice all'altra persona. Non serve essere sullo stesso Wi-Fi.</p>
+        <div id="playersLobby" class="players-lobby"></div>
+        <button id="startBtn" class="primary hidden">Inizia partita</button>
+        <p id="lobbyHint" class="muted"></p>
+      </div>
+    </section>
+
+    <section id="setupView" class="view">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">PREPARA IL CASO DELL'ALTRO</div>
+          <h2>Scegli 1 Personaggio, 1 Luogo e 1 Oggetto</h2>
+        </div>
+        <div class="selection-counter" id="selectionCounter">0 / 3</div>
+      </div>
+      <p class="muted setup-copy">Queste tre carte diventeranno il mistero che l'altro giocatore dovrà risolvere. Le due carte rimanenti resteranno segrete dietro il tuo schermo.</p>
+      <div id="setupHand" class="card-grid setup-grid"></div>
+      <div class="sticky-action">
+        <button id="submitSelectionBtn" class="primary" disabled>Conferma il caso</button>
+        <span id="setupStatus" class="muted"></span>
+      </div>
+    </section>
+
+    <section id="gameView" class="view">
+      <div class="game-status panel compact">
+        <div>
+          <div class="eyebrow">STANZA <span id="gameRoomCode"></span></div>
+          <div id="turnText" class="turn-text"></div>
+        </div>
+        <div class="game-status-actions">
+          <div class="player-pills" id="playerPills"></div>
+          <button id="callModeBtn" class="ghost small call-toggle">📞 Modalità in chiamata</button>
+        </div>
+      </div>
+
+      <div id="lastActionBox" class="last-action hidden"></div>
+
+      <section id="callModePanel" class="call-mode-panel hidden">
+        <div class="call-sheet-head">
+          <div>
+            <div class="eyebrow">MODALITÀ IN CHIAMATA</div>
+            <h2>Foglio degli appunti</h2>
+            <p>Fate le domande a voce. Sullo schermo resta soltanto il foglio per le deduzioni.</p>
+          </div>
+          <div class="call-sheet-actions">
+            <button id="resetNotesCallBtn" class="ghost small">Azzera appunti</button>
+            <button id="exitCallModeBtn" class="primary small">Esci dalla modalità</button>
+          </div>
+        </div>
+        <div id="callNotebook" class="notebook notebook-large"></div>
+      </section>
+
+      <div class="game-layout">
+        <div class="main-column">
+          <section class="panel mystery-panel">
+            <div class="panel-title-row">
+              <div>
+                <div class="eyebrow">IL TUO CASO</div>
+                <h3>Le 3 carte che devi scoprire</h3>
+              </div>
+              <div class="mystery-mini">
+                <span>?</span><span>?</span><span>?</span>
+              </div>
+            </div>
+            <p class="muted">Il tuo avversario le vede. Tu puoi dedurle interrogandolo, consultando gli informatori e prendendo appunti.</p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title-row">
+              <div>
+                <div class="eyebrow">CARTE CHE VEDI</div>
+                <h3>Il caso dell'altro detective</h3>
+              </div>
+              <span class="badge">3 carte</span>
+            </div>
+            <div id="opponentMystery" class="card-grid three-grid"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title-row">
+              <div>
+                <div class="eyebrow">DIETRO IL TUO SCHERMO</div>
+                <h3>Le tue 2 carte private</h3>
+              </div>
+            </div>
+            <div id="privateCards" class="private-grid"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-title-row">
+              <div>
+                <div class="eyebrow">INFORMATORI SEGRETI</div>
+                <h3>A–H</h3>
+              </div>
+              <span class="muted">Una consultazione = un turno</span>
+            </div>
+            <div id="informants" class="informant-grid"></div>
+          </section>
+        </div>
+
+        <aside class="side-column">
+          <section class="panel actions-panel">
+            <div class="eyebrow">LA TUA MOSSA</div>
+            <h3>Scegli un'azione</h3>
+            <div id="actionsLocked" class="locked-note hidden">Attendi il turno dell'altro giocatore.</div>
+            <div id="actionTabs" class="action-tabs">
+              <button class="tab active" data-tab="question">Interroga</button>
+              <button class="tab" data-tab="informant">Informatore</button>
+              <button class="tab danger-tab" data-tab="accuse">Accusa</button>
+            </div>
+
+            <div id="questionTab" class="tab-content active">
+              <p class="small-copy">Scegli un colore o una categoria e specifica quale carta privata dell'altro deve essere conteggiata.</p>
+              <label class="field-label">Domanda</label>
+              <select id="questionSelect" class="select-input"></select>
+              <label class="field-label">Carta privata da contare</label>
+              <div class="side-choice">
+                <button class="choice active" data-side="left">← Sinistra</button>
+                <button class="choice" data-side="right">Destra →</button>
+              </div>
+              <button id="askBtn" class="primary full">Fai la domanda</button>
+            </div>
+
+            <div id="informantTab" class="tab-content">
+              <p class="small-copy">Scegli una lettera. Solo tu vedrai la carta corrispondente.</p>
+              <select id="informantSelect" class="select-input"></select>
+              <button id="consultBtn" class="secondary full">Consulta in segreto</button>
+            </div>
+
+            <div id="accuseTab" class="tab-content">
+              <p class="small-copy">Se sbagli, il turno termina. Se indovini tutte e tre le carte, vinci.</p>
+              <select id="accusePerson" class="select-input"></select>
+              <select id="accusePlace" class="select-input"></select>
+              <select id="accuseObject" class="select-input"></select>
+              <button id="accuseBtn" class="danger full">Formula l'accusa</button>
+            </div>
+          </section>
+
+          <section class="panel notes-panel">
+            <div class="panel-title-row">
+              <div>
+                <div class="eyebrow">FOGLIO DEGLI APPUNTI</div>
+                <h3>I tuoi 18 indizi</h3>
+              </div>
+              <button id="resetNotesBtn" class="ghost small">Azzera</button>
+            </div>
+            <p class="small-copy">Tocca una casella: <strong>X</strong> = eliminata, <strong>?</strong> = possibile, <strong>O</strong> = sicuramente nelle 5 carte dell'avversario.</p>
+            <div id="notebook" class="notebook"></div>
+          </section>
+
+          <section class="panel log-panel">
+            <div class="eyebrow">CRONOLOGIA</div>
+            <div id="gameLog" class="game-log"></div>
+          </section>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button id="modalClose" class="modal-close" aria-label="Chiudi">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

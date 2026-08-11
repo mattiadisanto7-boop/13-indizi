@@ -1,0 +1,12 @@
+[
+  {"id":"vabbe","label":"Vabbè è solo un gioco","file":"vabbe-solo-un-gioco.mp3"},
+  {"id":"regalo","label":"Ti faccio un regalo","file":"ti-faccio-un-regalo.mp3"},
+  {"id":"stupidi","label":"Stai facendo il gioco degli stupidi","file":"gioco-degli-stupidi.mp3"},
+  {"id":"parideee","label":"Parideee","file":"parideee.mp3"},
+  {"id":"smettila","label":"Paride smettila","file":"paride-smettila.mp3"},
+  {"id":"finito","label":"Hai finito di vivere","file":"hai-finito-di-vivere.mp3"},
+  {"id":"novita","label":"Che cos'è questa novità?","file":"che-cose-questa-novita.mp3"},
+  {"id":"botte","label":"Mo tu hai le bötte","file":"mo-tu-hai-le-botte.mp3"},
+  {"id":"aiaaa","label":"Aiaaa Paride","file":"aiaaa-paride.mp3"},
+  {"id":"seviziato","label":"Mo devi essere seviziato","file":"mo-devi-essere-seviziato.mp3"}
+]
